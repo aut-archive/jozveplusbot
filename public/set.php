@@ -3,7 +3,7 @@ require_once __DIR__ . '/../src/telegram.php';
 global $telegram;
 
 try {
-    if(isset($_REQUEST['unset'])) {
+    if (isset($_REQUEST['unset']) && $_REQUEST['unset'] == 'true') {
         // Setup WebHook
         $result = $telegram->setWebhook(HOOK_URL); // ['certificate' => $path_certificate]
     } else {
