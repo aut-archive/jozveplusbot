@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '../src/telegram.php';
+require_once __DIR__ . '/../src/telegram.php';
 global $telegram;
 
 try {
