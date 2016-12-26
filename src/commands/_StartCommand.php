@@ -16,6 +16,7 @@ class _StartCommand extends UserCommand
 
     public function execute()
     {
+        
         $message = $this->getMessage();
         $data = [];
         $data['chat_id'] = $message->getChat()->getId();
