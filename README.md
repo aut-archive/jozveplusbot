@@ -1,4 +1,5 @@
 # JozvePlus Bot
+[![Docker Repository on Quay](https://quay.io/repository/aut-ceit/jozveplusbot/status "Docker Repository on Quay")](https://quay.io/repository/aut-ceit/jozveplusbot)
 Telegram bot that gets your booklets, archives them and allows everyone else get and use them :)
 
 ### Maintainers: 
