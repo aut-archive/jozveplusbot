@@ -1,0 +1,10 @@
+{
+    "name": "aut-ceit/jozveplusbot",
+    "description": "Booklet collector bot",
+    "type": "project",
+    "require": {
+        "longman/telegram-bot": "^0.38.1",
+        "vlucas/phpdotenv": "^2.4"
+    },
+    "license": "GPL"
+}
