@@ -43,13 +43,6 @@ try {
     // Handle telegram getUpdates request
     $serverResponse = $telegram->handleGetUpdates();
 
-    if ($serverResponse->isOk()) {
-        $updateCount = count($serverResponse->getResult());
-        echo date('Y-m-d H:i:s', time()) . ' - Processed ' . $updateCount . ' updates';
-    } else {
-        echo date('Y-m-d H:i:s', time()) . ' - Failed to fetch updates' . PHP_EOL;
-        echo $serverResponse->printError();
-    }
 
 } catch (Longman\TelegramBot\Exception\TelegramException $e) {
     echo $e;

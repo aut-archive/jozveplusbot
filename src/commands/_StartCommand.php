@@ -21,7 +21,7 @@ class _StartCommand extends UserCommand
         $data = [];
         $data['chat_id'] = $message->getChat()->getId();
 
-        $data['text'] = 'برای شروع کار از یکی از گزینه های موجود استفاده نمایید';
+        $data['text'] = 'تست تست';
 
         return Request::sendMessage($data);
     }
