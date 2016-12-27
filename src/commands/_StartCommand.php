@@ -12,17 +12,27 @@ use App\Lib\Telegram;
  */
 class _StartCommand extends UserCommand
 {
+    /**#@+
+     * {@inheritdoc}
+     */
     protected $name = 'start';
-    protected $description = 'شروع کار با ربات';
+    protected $description = 'دستور شروع';
     protected $usage = '/start';
-    /** @var  Telegram */
-    protected $telegram;
-    /** @var  Conversation */
+    protected $version = '1.0.0';
+    protected $enabled = true;
+    protected $public = true;
+    protected $message;
+    /**#@-*/
     protected $conversation;
-    protected $need_mysql = true;
 
+    /**
+     * _StartCommand constructor.
+     * @param Telegram $telegram
+     * @param Update $update
+     */
     public function __construct(Telegram $telegram, Update $update)
     {
+        $this->need_mysql = true;
         parent::__construct($telegram, $update);
         $this->telegram = $telegram;
     }
@@ -39,6 +49,13 @@ class _StartCommand extends UserCommand
         $data = [];
         $send = false;
         $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
+
+        if ($this->conversation == null) {
+            Request::sendMessage([
+                'chat_id' => $chat_id,
+                'text' => "Null conversation :|"
+            ]);
+        }
 
         Request::sendMessage([
             'chat_id' => $chat_id,
