@@ -11,6 +11,7 @@ function get_updates()
         $serverResponse = $telegram->handleGetUpdates();
 
         if ($serverResponse->isOk()) {
+            echo 'Getting update with ok responsen ' . PHP_EOL;
             $updateCount = count($serverResponse->getResult());
             if ($updateCount)
                 echo PHP_EOL . date('Y-m-d H:i:s', time()) . ' - Processed ' . $updateCount . ' updates'.PHP_EOL;
@@ -33,5 +34,5 @@ function get_updates()
 
 while (true) {
     get_updates();
-    //sleep(1);
+    usleep(2*1000*1000);
 }
