@@ -9,14 +9,16 @@ use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 
-class SubmitCommand extends UserCommand {
+class SubmitCommand extends UserCommand
+{
 
-    protected $name = 'sendtext';                      //your command's name
-    protected $description = 'ارسال متن';              //Your command description
-    protected $usage = '/sendtext';                    // Usage of your command
-    protected $version = '1.0.0';
+    protected $name = 'submit';
+    protected $description = 'ارسال متن';
+    protected $usage = '/submit';
     protected $enabled = true;
     protected $public = true;
+    protected $need_mysql = true;
+
     protected $message;
     protected $conversation;
     protected $telegram;
@@ -24,13 +26,15 @@ class SubmitCommand extends UserCommand {
     private $courses = ["مبانی برنامه‌نویسی (C/C++)", "آز کامپیوتر"];
     private $ioHelper;
 
-    public function __construct(Telegram $telegram, $update) {
+    public function __construct(Telegram $telegram, $update)
+    {
         parent::__construct($telegram, $update);
         $this->telegram = $telegram;
         $this->ioHelper = new IoHelper($telegram);
     }
 
-    public function execute() {
+    public function execute()
+    {
 
         $message = $this->getMessage();              // get Message info
         $chat = $message->getChat();
@@ -43,17 +47,19 @@ class SubmitCommand extends UserCommand {
         $data = [];
         $data['chat_id'] = $chat_id;
 
-        if (!empty($text)) {
-            $text = '';
-        }
-
+        // Conversation start
         $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
 
-        if (!isset($this->conversation->notes['state'])) {
-            $state = 0;
-        } else {
-            $state = $this->conversation->notes['state'];
+        $notes = &$this->conversation->notes;
+        !is_array($notes) && $notes = [];
+
+        //cache data from the tracking session if any
+        $state = 0;
+        if (isset($notes['state'])) {
+            $state = $notes['state'];
         }
+
+        var_dump($notes);
 
         if ($text == 'بازگشت ⬅️') {
             --$state;
@@ -61,6 +67,8 @@ class SubmitCommand extends UserCommand {
             $this->conversation->update();
             $text = '';
         }
+
+        $result = Request::emptyResponse();
 
         switch ($state) {
 
@@ -75,22 +83,25 @@ class SubmitCommand extends UserCommand {
                 $this->conversation->notes['professor'] = $text;
                 $this->conversation->notes['state'] = ++$state;
                 $this->conversation->update();
-                $text = '';
 
             case 1:
                 // Todo: More keyboard
                 if (empty($text) || !in_array($text, $this->courses)) { // check if course array contains the course
                     $data['text'] = 'نام درس (course) را وارد کنید';
                     $data['reply_to_message'] = $message_id;
-                    $keyboardArray = [];
-                    $offset = $this->getCourseOffset();
-                    for ($i=$offset; $i<$offset+9; $i++) {
-                        if (count($this->courses) > $i) {
-                            $j = (int) floor(($i-$offset)/3);
-                            $keyboardArray[$j][$i%3] = $this->courses[$i];
-                        } else break;
-                    }
-                    $this->setCourseOffset($offset+9);
+
+                    // TODO: FIX ME
+//                    $keyboardArray = [];
+//                    $offset = $this->getCourseOffset();
+//                    for ($i = $offset; $i < $offset + 9; $i++) {
+//                        if (count($this->courses) > $i) {
+//                            $j = (int)floor(($i - $offset) / 3);
+//                            $keyboardArray[$j][$i % 3] = $this->courses[$i];
+//                        } else break;
+//                    }
+//                    $this->setCourseOffset($offset + 9);
+                    $keyboardArray=$this->courses;// Until fix
+
                     $keyboard = new Keyboard($keyboardArray);
                     $keyboard->setResizeKeyboard(true);
                     $data['reply_markup'] = $keyboard;
@@ -141,10 +152,10 @@ class SubmitCommand extends UserCommand {
                     $this->conversation->notes['file_id']
                 );
                 $this->setCourseOffset(0);
-                $this->ioHelper->setJozve($jozve);
-                $this->ioHelper->saveJozve();
+                $this->ioHelper->saveJozve($jozve);
+
                 $data['text'] = sprintf(
-                    'جزوه‌ی سال %d استاد %s - درس %s (از طرف %s):)' . PHP_EOL . '@JozvePlusBot',
+                    'جزوه‌ی سال %d استاد %s - درس %s  - از طرف %s' . PHP_EOL . '@JozvePlusBot',
                     $jozve->getYear(),
                     $jozve->getProfessor(),
                     $jozve->getCourse(),
@@ -168,7 +179,8 @@ class SubmitCommand extends UserCommand {
 
     }
 
-    private function getCourseOffset() {
+    private function getCourseOffset()
+    {
         if (!isset($this->conversation->notes['course_offset'])) {
             return 0;
         } else {
@@ -176,7 +188,8 @@ class SubmitCommand extends UserCommand {
         }
     }
 
-    private function setCourseOffset($courseOffset) {
+    private function setCourseOffset($courseOffset)
+    {
         $this->conversation->notes['course_offset'] = $courseOffset;
     }
 

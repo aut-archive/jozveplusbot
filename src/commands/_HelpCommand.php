@@ -7,6 +7,7 @@ use Longman\TelegramBot\Request;
 
 /**
  * User "/help" command
+ * TODO: I'm ugly :(
  */
 class _HelpCommand extends UserCommand
 {

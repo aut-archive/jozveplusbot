@@ -13,10 +13,10 @@ function get_updates()
         if ($serverResponse->isOk()) {
             $updateCount = count($serverResponse->getResult());
             if ($updateCount)
-                echo PHP_EOL . date('Y-m-d H:i:s', time()) . ' - Processed ' . $updateCount . ' updates';
+                echo PHP_EOL . date('Y-m-d H:i:s', time()) . ' - Processed ' . $updateCount . ' updates'.PHP_EOL;
             else echo ".";
         } else {
-            echo PHP_EOL . date('Y-m-d H:i:s', time()) . ' - Failed to fetch updates';
+            echo PHP_EOL . date('Y-m-d H:i:s', time()) . ' - Failed to fetch updates'.PHP_EOL;
             echo $serverResponse->printError();
         }
 
@@ -33,5 +33,5 @@ function get_updates()
 
 while (true) {
     get_updates();
-    sleep(1);
+    //sleep(1);
 }

@@ -13,7 +13,7 @@ class Telegram extends BaseTelegram
 
     public function getCommandObject($command)
     {
-        if (in_array($command, ['start', 'help', 'cancel', 'Callbackquery']))
+        if (in_array($command, ['start', 'help', 'cancel','Generic', 'genericmessage']))
             $command = '_' . mb_strtolower($command);
 
         return parent::getCommandObject($command);
