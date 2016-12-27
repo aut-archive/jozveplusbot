@@ -1,15 +1,7 @@
 <?php
+namespace App\Utils;
 
-/**
- * Created by PhpStorm.
- * User: mohamadamin
- * Date: 12/26/16
- * Time: 6:33 PM
- */
-
-namespace Util;
-
-use \Entity\Jozve;
+use App\Entity\Jozve;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
 use Longman\TelegramBot\Entities\File;

@@ -1,20 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mohamadamin
- * Date: 12/26/16
- * Time: 4:43 PM
- */
-
 namespace Longman\TelegramBot\Commands\UserCommands;
 
+use App\Entity\Jozve;
+use App\Utils\IoHelper;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Request;
 use Longman\TelegramBot\Telegram;
-use Entity\Jozve;
-use Util\IoHelper;
 
 class SubmitCommand extends UserCommand {
 

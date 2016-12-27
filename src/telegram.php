@@ -1,6 +1,7 @@
 <?php
+use App\Lib\Telegram;
+
 require_once __DIR__ . '/bootstrap.php';
-require_once __DIR__ . '/lib/Telegram.php';
 
 try {
     // Create Telegram API object

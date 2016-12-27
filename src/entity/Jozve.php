@@ -1,13 +1,5 @@
 <?php
-
-/**
- * Created by PhpStorm.
- * User: mohamadamin
- * Date: 12/26/16
- * Time: 5:41 PM
- */
-
-namespace Entity;
+namespace App\Entity;
 
 class Jozve {
 

@@ -19,3 +19,6 @@ $sql = file_get_contents(BASE_DIR . '/vendor/longman/telegram-bot/structure.sql'
 
 // Execute
 $pdo->exec($sql);
+
+//
+echo "Migrate done!";

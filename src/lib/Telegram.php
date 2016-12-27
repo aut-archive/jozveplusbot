@@ -1,10 +1,10 @@
 <?php
+namespace App\Lib;
 
-class Telegram extends Longman\TelegramBot\Telegram
+use Longman\TelegramBot\Telegram as BaseTelegram;
+
+class Telegram extends BaseTelegram
 {
-
-    protected $version = '1.0.0';
-
     public function addCommandsPath($path, $before = true)
     {
         if ($path != BASE_COMMANDS_PATH . '/UserCommands')
@@ -14,11 +14,9 @@ class Telegram extends Longman\TelegramBot\Telegram
     public function getCommandObject($command)
     {
         if (in_array($command, ['start', 'help', 'cancel', 'Callbackquery']))
-                $command = '_' . mb_strtolower($command);
+            $command = '_' . mb_strtolower($command);
 
         return parent::getCommandObject($command);
     }
-
-
 }
 
