@@ -1,8 +1,10 @@
 <?php
 namespace Longman\TelegramBot\Commands\UserCommands;
+
 use Longman\TelegramBot\Commands\UserCommand;
-use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
+use Longman\TelegramBot\Entities\Update;
+use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Request;
 use App\Lib\Telegram;
 /**
@@ -19,6 +21,12 @@ class _StartCommand extends UserCommand
     protected $conversation;
     protected $need_mysql = true;
 
+    public function __construct(Telegram $telegram, Update $update)
+    {
+        parent::__construct($telegram, $update);
+        $this->telegram = $telegram;
+    }
+
     public function execute()
     {
         $message = $this->getMessage();
@@ -27,9 +35,9 @@ class _StartCommand extends UserCommand
         $chat_id = $chat->getId();
         $user_id = $user->getId();
         $text = $message->getText();
+
         $data = [];
         $send = false;
-
         $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
 
         Request::sendMessage([
