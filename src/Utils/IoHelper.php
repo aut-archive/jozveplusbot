@@ -9,6 +9,7 @@ use Longman\TelegramBot\Entities\File;
 class IoHelper
 {
 
+    /** @var Jozve */
     private $jozve;
     private $telegram;
 

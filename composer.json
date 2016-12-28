@@ -3,7 +3,7 @@
     "description": "Booklet collector bot",
     "type": "project",
     "require": {
-        "longman/telegram-bot": "^0.36",
+        "longman/telegram-bot": "^0.38.1",
         "vlucas/phpdotenv": "^2.4"
     },
     "autoload": {

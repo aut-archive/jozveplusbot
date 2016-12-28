@@ -23,6 +23,8 @@ class _StartCommand extends UserCommand
     protected $public = true;
     protected $message;
     /**#@-*/
+
+    /** @var  Conversation */
     protected $conversation;
 
     /**
@@ -39,48 +41,27 @@ class _StartCommand extends UserCommand
 
     public function execute()
     {
+
         $message = $this->getMessage();
+
         $chat = $message->getChat();
         $user = $message->getFrom();
+        $text = trim($message->getText(true));
         $chat_id = $chat->getId();
         $user_id = $user->getId();
-        $text = $message->getText();
 
         $data = [];
         $send = false;
+        //Conversation start
         $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
 
-        if ($this->conversation == null) {
-            Request::sendMessage([
-                'chat_id' => $chat_id,
-                'text' => "Null conversation :|"
-            ]);
-        }
-
-        Request::sendMessage([
-            'chat_id' => $chat_id,
-            'text' => "Got text: " . $text
-        ]);
-
         if ($text === 'ارسال جزوه') {
-            Request::sendMessage([
-                'chat_id' => $chat_id,
-                'text' => "Got submit: " . $text
-            ]);
             $this->conversation->stop();
             $this->telegram->executeCommand("submit");
         } else if ($text === 'درباره ربات') {
-            Request::sendMessage([
-                'chat_id' => $chat_id,
-                'text' => "Got about: " . $text
-            ]);
             $this->conversation->stop();
             $this->telegram->executeCommand("about");
         } else {
-            Request::sendMessage([
-                'chat_id' => $chat_id,
-                'text' => "Got else: " . $text
-            ]);
             $keyboard = new Keyboard(
                 ['درباره ربات', 'ارسال جزوه']
             );

@@ -20,6 +20,7 @@ class SubmitCommand extends UserCommand
     protected $need_mysql = true;
 
     protected $message;
+    /** @var  Conversation */
     protected $conversation;
     protected $telegram;
 
@@ -36,30 +37,26 @@ class SubmitCommand extends UserCommand
     public function execute()
     {
 
-        $message = $this->getMessage();              // get Message info
+        $message = $this->getMessage();
+
         $chat = $message->getChat();
         $user = $message->getFrom();
+        $text = trim($message->getText(true));
         $chat_id = $chat->getId();
         $user_id = $user->getId();
-        $text = $message->getText(true);
-        $message_id = $message->getMessageId();      //Get message Id
+        $message_id = $message->getMessageId();
 
         $data = [];
         $data['chat_id'] = $chat_id;
 
-        // Conversation start
+        //Conversation start
         $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
-
-        $notes = &$this->conversation->notes;
-        !is_array($notes) && $notes = [];
 
         //cache data from the tracking session if any
         $state = 0;
-        if (isset($notes['state'])) {
-            $state = $notes['state'];
+        if (isset($this->conversation->notes['state'])) {
+            $state = $this->conversation->notes['state'];
         }
-
-        var_dump($notes);
 
         if ($text == 'بازگشت ⬅️') {
             --$state;
@@ -138,7 +135,7 @@ class SubmitCommand extends UserCommand
                     $result = Request::sendMessage($data);
                     break;
                 }
-                $this->conversation->notes['file_id'] = $text;
+                $this->conversation->notes['file_id'] = $message->getDocument()->getFileId();
                 $this->conversation->notes['state'] = ++$state;
                 $this->conversation->update();
                 $text = '';
@@ -154,7 +151,8 @@ class SubmitCommand extends UserCommand
                 $this->setCourseOffset(0);
                 $this->ioHelper->saveJozve($jozve);
 
-                $data['text'] = sprintf(
+                $data['chat_id'] = $chat_id;
+                $data['caption'] = sprintf(
                     'جزوه‌ی سال %d استاد %s - درس %s  - از طرف %s' . PHP_EOL . '@JozvePlusBot',
                     $jozve->getYear(),
                     $jozve->getProfessor(),
@@ -162,9 +160,9 @@ class SubmitCommand extends UserCommand
                     $jozve->getOwner()
                 );
                 $data['document'] = $jozve->getFileId();
-                $data['reply_to_message'] = $message_id;
+                $data['reply_to_message_id'] = $message_id;
                 $data['reply_markup'] = Keyboard::remove();
-                $result = Request::sendMessage($data);
+                $result = Request::sendDocument($data);
                 $this->conversation->stop();
                 $this->telegram->executeCommand('start');
                 break;
